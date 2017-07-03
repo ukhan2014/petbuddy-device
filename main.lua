@@ -2,6 +2,8 @@
 
 -- Define serial number as a global
 s_no = "PB053117104000"
+home_wifi_ssid = 0
+home_wifi_psk = 0
 
 -- Set up the softAP. This makes PBD appear
 -- as a WiFi network to anyone in range.
@@ -75,21 +77,37 @@ end
 -- Creates a server that will respond to HTTP
 -- requests from anybody that is connected
 function beginServer()
+   count = 0
+   print("count=" .. count)
    print("beginServer()")
    srv=net.createServer(net.TCP)
    srv:listen(8234,function(conn)
       conn:on("receive",function(conn,payload)
          print (payload)
          if string.match(payload, string.reverse(s_no)) then
-            print ("mobile said hi, sending hi back")
-            conn:send("RX: " .. string.reverse(payload))
-         else
+            if count == 0 then
+               print ("mobile said hi, sending hi back")
+               conn:send("RX:" .. string.reverse(payload) .. ":sendwifi")
+               count = count + 1
+               print("count=" .. count)
+            end
+         elseif string.find(payload, "ssid") then
+            if count == 1 then
+               home_wifi_ssid = string.sub(payload, 6, string.find(payload, "\n") - 1)
+               home_wifi_psk = string.sub(payload, string.find(payload, "\n") + 5)
+               print("rx_ssid=" .. home_wifi_ssid)
+               print("rx_psk=" .. home_wifi_psk)
+               count = count + 1
+               print("count=" .. count)
+               conn:send("Thank you, byebye.")
+               conn:on("sent",function(conn) 
+                  conn:close() 
+               end)
+            end
+         elseif count == 0 then
             print ("unknown msg received")
             conn:send("what? expected= " .. string.reverse(s_no))
          end
-      end)
-      conn:on("sent",function(conn) 
-         conn:close() 
       end)
    end)
 end
@@ -111,3 +129,4 @@ else
    print("no env file, start cfg")
    waitForClients()
 end
+
