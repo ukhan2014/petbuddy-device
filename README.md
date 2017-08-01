@@ -6,3 +6,4 @@ Device side code for PetBuddy
   - flowchart file can be opened with draw.io webapp
 
 Camera:
+  - ov2640 jpeg cam
