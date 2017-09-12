@@ -18,6 +18,7 @@ How to get up and running:
 	> ioreg -p IOUSB | grep -i cp
 
 	You should see something like this:
+	
 	  | | +-o CP2102 USB to UART Bridge Controller@14420000  <class AppleUSBDevice, id 0x1002f7bd7, registered, matched, active, busy 0 (458 ms), retain 17>
 
 4. Go back to ESPlorer.
@@ -33,7 +34,8 @@ How to get up and running:
 
 7. Click the big "Open" button which is underneath the device
    dropdown. You should see something like:
-   		PORT OPEN 115200
+   		
+		PORT OPEN 115200
 
 		Communication with MCU..
 
