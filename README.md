@@ -32,6 +32,15 @@ How to get up and running:
    /dev/cu.SLAB_USBtoUART
    Make sure that entry is selected.
 
+   If you cannot see the entry, the Silicon Labs drivers for the CP
+   USB <-> UART chip on the nodemcu might not be installed.
+   (eg. it wouldn't work on OSX Sierra without drivers),
+   download the drivers from Silicon Labs' website:
+   https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers
+
+   You might also have to play around with the kexts so that silabs
+   driver gets loaded as a kext. Google for more info.
+
 7. Click the big "Open" button which is underneath the device
    dropdown. You should see something like:
    		
