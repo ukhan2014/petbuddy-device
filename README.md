@@ -58,3 +58,24 @@ How to get up and running:
 10. The code should automatically start running. The Petbuddy
    Wifi should start broadcasting and you should be able to
    see it in the wifi selection of your phone or macbook.
+
+
+*****************************
+Servo
+*****************************
+In code the servo pwm pin is pin 2. But in the code and the actual board this
+corresponds to GPIO_4.
+
+The pinout is as follows:
+D0   = 16
+D1   = 5
+D2   = 4
+D3   = 0
+D4   = 2
+D5   = 14
+D6   = 12
+D7   = 13
+D8   = 15
+D9   = 3
+D10  = 1
+
