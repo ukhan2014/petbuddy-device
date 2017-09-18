@@ -15,7 +15,11 @@ function servo.write(val,fi)
     if(val<min) then val = min end
     if(val>max) then val = max end
     pwm.setduty(pin,val)
-    if(fi) then tmr.alarm( 1, 1000, 0, function() pwm.stop(pin) end ) end
+    --if(fi) then tmr.alarm( 1, 1000, 0, function() pwm.stop(pin) end ) end
+end
+
+function servo.stop()
+    pwm.stop(pin)
 end
 
 return servo
