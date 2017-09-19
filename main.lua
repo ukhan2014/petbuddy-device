@@ -8,10 +8,10 @@ home_wifi_psk = 0
 ----------------------------------
 --       main() function        --
 ----------------------------------
-pb = require "petbuddy"
 print("main()")
+
+pb = require "petbuddy"
 servo = require "servo"
-print("testing servo")
 
 pb.setupAP()
    

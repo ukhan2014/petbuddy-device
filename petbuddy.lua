@@ -4,6 +4,7 @@
 
 local petbuddy = {}
 
+
 -- Set up the softAP. This makes PBD appear
 -- as a WiFi network to anyone in range.
 function petbuddy.setupAP()
@@ -162,11 +163,14 @@ function petbuddy.doServo()
    pin = 2
    servo.init(pin)
    servo.write(180)         -- turn servo to open feed door
-   timer.delay(500000)      -- wait 0.5s
-   tmr.alarm( 0, 1000, 1, function()
+   if not tmr.create():alarm(500, tmr.ALARM_SINGLE, function()
+      print("servo stop")
       servo.write(0)           -- turn servo to close
       servo.stop()             -- stop powering servo
    end)
+   then
+   print("error creating alarm in pb.doservo()")
+   end
 end
 
 --
