@@ -58,7 +58,7 @@ function petbuddy.waitForClients()
             print(mac,ip)
          end
          tmr.stop(0)
-         beginServer()
+         petbuddy.beginServer()
       end
    end) 
 end
@@ -91,7 +91,7 @@ function petbuddy.beginServer()
                conn:send("Thank you, byebye.")
                conn:on("sent",function(conn) 
                   conn:close() 
-                  connect2HomeWifi()
+                  petbuddy.connect2HomeWifi()
                end)
             end
          elseif count == 0 then
