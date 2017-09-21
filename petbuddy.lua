@@ -4,7 +4,6 @@
 
 local petbuddy = {}
 
-
 -- Set up the softAP. This makes PBD appear
 -- as a WiFi network to anyone in range.
 function petbuddy.setupAP()
@@ -71,35 +70,38 @@ function petbuddy.beginServer()
    print("beginServer()")
    srv=net.createServer(net.TCP)
    srv:listen(8234,function(conn)
-      conn:on("receive",function(conn,payload)
-         print (payload)
-         if string.match(payload, string.reverse(s_no)) then
-            if count == 0 then
-               print ("mobile said hi, sending hi back")
-               conn:send("RX:" .. string.reverse(payload) .. ":sendwifi")
-               count = count + 1
-               print("count=" .. count)
-            end
-         elseif string.find(payload, "ssid") then
-            if count == 1 then
-               home_wifi_ssid = string.sub(payload, 6, string.find(payload, "\n") - 1)
-               home_wifi_psk = string.sub(payload, string.find(payload, "\n") + 5)
-               print("rx_ssid=" .. home_wifi_ssid)
-               print("rx_psk=" .. home_wifi_psk)
-               count = count + 1
-               print("count=" .. count)
-               conn:send("Thank you, byebye.")
-               conn:on("sent",function(conn) 
-                  conn:close() 
-                  petbuddy.connect2HomeWifi()
-               end)
-            end
-         elseif count == 0 then
-            print ("unknown msg received")
-            conn:send("what? expected= " .. string.reverse(s_no))
+      conn:on("receive",function(conn,msg)
+         print("cmdHandler msg=" .. msg)
+         conn:send("PetBuddy: " .. msg .. "\n")
+         if(msg == "hello") then
+            conn:send(s_no .. ": reporting 4 duty")
+         elseif(msg ==  "feedpet") then
+            petbuddy.doServo()
+         elseif(string.match(msg, "turnServo")) then
+            conn:send("turning the servo")
+         elseif string.match(msg, string.reverse(s_no)) then
+            print ("mobile said hi, sending hi back")
+            conn:send("RX:" .. string.reverse(payload) .. ":sendwifi")
+         elseif string.find(msg, "ssid") then
+            home_wifi_ssid = string.sub(payload, 6, string.find(payload, "\n") - 1)
+            home_wifi_psk = string.sub(payload, string.find(payload, "\n") + 5)
+            print("rx_ssid=" .. home_wifi_ssid)
+            print("rx_psk=" .. home_wifi_psk)
+            conn:send("Thank you, turning off this server, byebye.")
+            conn:on("sent",function(conn) 
+               conn:close() 
+               petbuddy.connect2HomeWifi()
+            end)
+            return
+         else
+            conn:send("PetBuddy: I don't know what that means.")
+            --conn:send("RX:" .. string.reverse(payload) .. ":sendwifi")
+         --elseif(msg == "") then
+            --conn:send("RX:" .. string.reverse(payload) .. ":sendwifi")
          end
       end)
    end)
+   print("leaving server function")
 end
 
 function petbuddy.connect2HomeWifi()
@@ -160,8 +162,11 @@ end
 
 -- rotate servo to provide feed for pet (UNTESTED)
 function petbuddy.doServo()
+   -- TODO: move this to an init function:
    pin = 2
    servo.init(pin)
+   --
+   
    servo.write(180)         -- turn servo to open feed door
    if not tmr.create():alarm(500, tmr.ALARM_SINGLE, function()
       print("servo stop")
