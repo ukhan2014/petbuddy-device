@@ -4,6 +4,12 @@
 
 local petbuddy = {}
 
+
+function pingCloud()
+   
+end
+
+
 -- Set up the softAP. This makes PBD appear
 -- as a WiFi network to anyone in range.
 function petbuddy.setupAP()
@@ -38,15 +44,17 @@ end
 -- Wait for a client to connect to the 
 -- softAP we have created
 function petbuddy.waitForClients()
+   waitCount = 0
    print("waitForClients()")
    
    tmr.alarm( 0, 1000, 1, function()
+      waitCount = waitCount + 1
       --if wifi.sta.getip() == nil then
       --   print("Connecting to AP...\n")
       table = {}
       table = wifi.ap.getclient()
-      if next(table) == nil then
-         print("waitForClients(): No cnxn 4 PBD setup")
+      if (next(table) == nil and waitCount < 2) then
+         print("waitForClients(): Waiting for a cnxn for PBD setup")
       else
          ip, nm, gw=wifi.ap.getip()
          print("IP Info: \nIP Address: ",ip)
@@ -65,8 +73,6 @@ end
 -- Creates a server that will respond to HTTP
 -- requests from anybody that is connected
 function petbuddy.beginServer()
-   count = 0
-   print("count=" .. count)
    print("beginServer()")
    srv=net.createServer(net.TCP)
    srv:listen(8234,function(conn)
