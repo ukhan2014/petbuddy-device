@@ -79,3 +79,29 @@ D8   = 15
 D9   = 3
 D10  = 1
 
+
+*****************************
+Virtual python3 environment
+*****************************
+Mac OSX ships with python 2.7. We are using python3.
+
+Virtual environments make this really easy:
+1. Go to petbuddy-device repo directory and do:
+    $ virtualenv -p python3 pbd-env
+
+2. When the last command is done, do:
+    $ source pbd-env/bin/activate
+
+3. When the last command is done do:
+    $ pip install jupyter
+
+Now the jupyter notebook should run with a python3 kernel
+
+When you are done with doing petbuddy-device stuff, you can do:
+    $ deactivate
+
+This will deactivate the virtual environtmen. Next time when you
+are making changes make sure to do the original activation command
+from step 2 above ^^^.
+
+
