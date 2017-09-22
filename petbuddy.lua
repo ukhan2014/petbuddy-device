@@ -81,10 +81,10 @@ function petbuddy.beginServer()
             conn:send("turning the servo")
          elseif string.match(msg, string.reverse(s_no)) then
             print ("mobile said hi, sending hi back")
-            conn:send("RX:" .. string.reverse(payload) .. ":sendwifi")
+            conn:send("RX:" .. string.reverse(msg) .. ":sendwifi")
          elseif string.find(msg, "ssid") then
-            home_wifi_ssid = string.sub(payload, 6, string.find(payload, "\n") - 1)
-            home_wifi_psk = string.sub(payload, string.find(payload, "\n") + 5)
+            home_wifi_ssid = string.sub(msg, 6, string.find(msg, "\n") - 1)
+            home_wifi_psk = string.sub(msg, string.find(msg, "\n") + 5)
             print("rx_ssid=" .. home_wifi_ssid)
             print("rx_psk=" .. home_wifi_psk)
             conn:send("Thank you, turning off this server, byebye.")
