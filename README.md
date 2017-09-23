@@ -4,6 +4,7 @@ Device side code for PetBuddy
   - lua codebase runs on esp-8266
   - using NodeMCU as devkit
   - flowchart file can be opened with draw.io webapp
+  - NodeMCU firmware binary/info can be found in the ./fw/ directory
 
 Camera:
   - ov2640 jpeg cam
