@@ -1,3 +1,20 @@
 Fri, Sep 22, 2017 at 9:43 PM
 
 This was built against the master branch and includes the following modules: file, gpio, http, net, node, tmr, websocket, wifi.
+
+To flash this build:
+1. first make sure esptool is installed:
+     i.    activate the pbd-env by going into the petbuddy-device folder and doing:
+             $ source pbd-env/bin/activate
+     ii.   install esptool using pip:
+             $ pip install esptool
+     iii.  find where it got installed by doing:
+             $ find . -iname esptool*
+
+2. Connect the nodemcu devkit on the USB and check for it on the usb port:
+	$ ls /dev | grep -i slab
+	cu.SLAB_USBtoUART
+	tty.SLAB_USBtoUART   ----------------------------------
+                                                          |
+3. To flash the firmware do:                              ▽
+    $ sudo python ./pbd-env/path/to/esptool.py --port /dev/<serial-port-of-ESP8266> write_flash -fm dio 0x00000 <nodemcu-firmware>.bin
