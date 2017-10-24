@@ -11,7 +11,6 @@ home_wifi_psk = 0
 print("main()")
 
 pb = require "petbuddy"
-servo = require "servo"
 
 pb.setupAP()
    
