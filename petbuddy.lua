@@ -4,11 +4,32 @@
 
 local petbuddy = {}
 
+function petbuddy.pingCloud(port, ip)
+   print("pingCloud()")
+   print(collectgarbage("count"))
+   socket = net.createConnection(net.TCP, 0)
+   
+   -- Wait for connection before sending.
+   socket:on("connection", function(sck)
+      print("onConnection")
+      -- 'Connection: close' rather than 'Connection: keep-alive' to have server 
+      -- initiate a close of the connection after final response (frees memory 
+      -- earlier here), https://tools.ietf.org/html/rfc7230#section-6.6 
+      sck:send("GET /get HTTP/1.1\r\nHost: httpbin.org\r\nConnection: close\r\nAccept: */*\r\n\r\n")
+      print(collectgarbage("count"))
+   end)
+   
+   -- When the stuff is sent close the connection
+   socket:on("sent", function(sck, c)
+      print("onSent()")
+      sck:close()
+      print("didPing")
+   end)
 
-function pingCloud()
+   print("connecting to " .. ip .. ":" .. port)
+   socket:connect(port,ip)
    
 end
-
 
 -- Set up the softAP. This makes PBD appear
 -- as a WiFi network to anyone in range.
@@ -47,13 +68,13 @@ function petbuddy.waitForClients()
    waitCount = 0
    print("waitForClients()")
    
-   tmr.alarm( 0, 1000, 1, function()
+   tmr.alarm( 0, 5000, 1, function()
       waitCount = waitCount + 1
       --if wifi.sta.getip() == nil then
       --   print("Connecting to AP...\n")
       table = {}
       table = wifi.ap.getclient()
-      if (next(table) == nil and waitCount < 2) then
+      if (next(table) == nil) then
          print("waitForClients(): Waiting for a cnxn for PBD setup")
       else
          ip, nm, gw=wifi.ap.getip()
@@ -65,17 +86,19 @@ function petbuddy.waitForClients()
             print(mac,ip)
          end
          tmr.stop(0)
-         petbuddy.beginServer()
+         petbuddy.beginServer(8234)
       end
    end) 
 end
 
 -- Creates a server that will respond to HTTP
--- requests from anybody that is connected
-function petbuddy.beginServer()
+-- requests from anybody that is connected. This
+-- will remain on and listening until it is
+function petbuddy.beginServer(port)
    print("beginServer()")
+   print(collectgarbage("count"))
    srv=net.createServer(net.TCP)
-   srv:listen(8234,function(conn)
+   srv:listen(port,function(conn)
       conn:on("receive",function(conn,msg)
          print("cmdHandler msg=" .. msg)
          conn:send("PetBuddy: " .. msg .. "\n")
@@ -88,6 +111,13 @@ function petbuddy.beginServer()
          elseif string.match(msg, string.reverse(s_no)) then
             print ("mobile said hi, sending hi back")
             conn:send("RX:" .. string.reverse(msg) .. ":sendwifi")
+         elseif(msg == "ping") then
+            print("received message: ping")
+            print(collectgarbage("count"))
+            conn:close()
+            print("count after conn:close")
+            print(collectgarbage("count"))
+            petbuddy.pingCloud(10004,"192.168.1.2")
          elseif string.find(msg, "ssid") then
             home_wifi_ssid = string.sub(msg, 6, string.find(msg, "\n") - 1)
             home_wifi_psk = string.sub(msg, string.find(msg, "\n") + 5)
