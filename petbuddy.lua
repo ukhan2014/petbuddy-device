@@ -123,15 +123,15 @@ function petbuddy.beginServer(port)
             home_wifi_psk = string.gsub(home_wifi_psk, "\n", "") -- remove line breaks
             print("rx_ssid=" .. home_wifi_ssid)
             print("rx_psk=" .. home_wifi_psk)
-            conn:send("Thank you, turning off this server, byebye.")
-            conn:on("sent",function(conn) 
+            conn:send("Thank you, turning off this server, byebye.\n")
+            conn:on("sent",function(conn)
                conn:close() 
                petbuddy.connect2HomeWifi()
             end)
             return
          else
             print("unknown message")
-            conn:send("PetBuddy: I don't know what that means.")
+            conn:send("PetBuddy: I don't know what that means.\n")
             --conn:send("RX:" .. string.reverse(payload) .. ":sendwifi")
          --elseif(msg == "") then
             --conn:send("RX:" .. string.reverse(payload) .. ":sendwifi")
