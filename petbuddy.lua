@@ -129,6 +129,9 @@ function petbuddy.beginServer(port)
                petbuddy.connect2HomeWifi()
             end)
             return
+         elseif string.find(msg, "reginfo") then
+            print("got registration info")
+            conn:send("PetBuddy: Registering...\n")
          else
             print("unknown message")
             conn:send("PetBuddy: I don't know what that means.\n")
