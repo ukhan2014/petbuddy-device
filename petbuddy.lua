@@ -131,7 +131,9 @@ function petbuddy.beginServer(port)
             return
          elseif string.find(msg, "reginfo") then
             print("got registration info")
+            reginfo = string.sub(msg, 9, string.find(msg, "\n")
             conn:send("PetBuddy: Registering...\n")
+            registerWithPetBuddyCloud(reginfo)
          else
             print("unknown message")
             conn:send("PetBuddy: I don't know what that means.\n")
@@ -143,6 +145,34 @@ function petbuddy.beginServer(port)
    end)
    print("leaving server function")
 end
+
+function petbuddy.sendMsgToSocket(port, ip, msg)
+   print("sendMsgToSocket()")
+   print(collectgarbage("count"))
+   socket = net.createConnection(net.TCP, 0)
+   
+   -- Wait for connection before sending.
+   socket:on("connection", function(sck)
+      print("onConnection")
+      -- 'Connection: close' rather than 'Connection: keep-alive' to have server 
+      -- initiate a close of the connection after final response (frees memory 
+      -- earlier here), https://tools.ietf.org/html/rfc7230#section-6.6 
+      sck:send(s_no .. ":" .. msg)
+      print(collectgarbage("count"))
+   end)
+   
+   -- When the stuff is sent close the connection
+   socket:on("sent", function(sck, c)
+      print("onSent()")
+      sck:close()
+      print("sendMsgToSocket done")
+   end)
+
+   print("connecting to " .. ip .. ":" .. port)
+   socket:connect(port,ip)
+   
+end
+   
 
 function petbuddy.connect2HomeWifi()
    --register callbacks
