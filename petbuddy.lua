@@ -146,6 +146,7 @@ function petbuddy.beginServer(port)
    print("leaving server function")
 end
 
+-- Replacement for pingCloud
 function petbuddy.sendMsgToSocket(port, ip, msg)
    print("sendMsgToSocket()")
    print(collectgarbage("count"))
