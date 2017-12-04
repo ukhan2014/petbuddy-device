@@ -1,0 +1,20 @@
+Communication between pbc and pbd:
+
+1. open socket from pbd to pbc
+2. send msg with following format:
+   <msg-type>:<msg>
+3. pbc to send ack to pbd
+4. pbd to send ack to pbc
+5. pbc to inform pbd of result
+6. pbc to log event
+
+
+Communication between pbc and pbm:
+
+1. open socket from pbm to pbc
+2. send msg with following format:
+   <msg-type>:<msg>
+3. pbc to send ack to pbm
+4. pbm to send ack to pbc
+5. pbc to inform pbm of result
+6. pbc to log event
