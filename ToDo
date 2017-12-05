@@ -1,3 +1,6 @@
+Check how the devreg in pbc was tested.
+1. Find python test code from the ipython notebook
+
 Communication between pbc and pbd:
 
 1. open socket from pbd to pbc
