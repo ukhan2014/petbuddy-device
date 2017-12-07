@@ -1,5 +1,6 @@
 Check how the devreg in pbc was tested.
 1. Find python test code from the ipython notebook
+2. implement code in pbd
 
 Communication between pbc and pbd:
 
