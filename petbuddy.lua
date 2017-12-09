@@ -131,9 +131,9 @@ function petbuddy.beginServer(port)
             return
          elseif string.find(msg, "reginfo") then
             print("got registration info")
-            reginfo = string.sub(msg, 9, string.find(msg, "\n")
+            reginfo = string.sub(msg, 9, string.find(msg, "\n"))
             conn:send("PetBuddy: Registering...\n")
-            registerWithPetBuddyCloud(reginfo)
+            petbuddy.registerWithPetBuddyCloud(reginfo)
          else
             print("unknown message")
             conn:send("PetBuddy: I don't know what that means.\n")
@@ -146,7 +146,12 @@ function petbuddy.beginServer(port)
    print("leaving server function")
 end
 
--- Replacement for pingCloud
+function petbuddy.registerWithPetBuddyCloud(reginfo)
+   print("registerWithPetBuddyCloud()")
+   print("reginfo passed is: " .. reginfo)
+   --petbuddy.sendMsgToSocket(43332, "74.51.159.20",reginfo)
+end
+
 function petbuddy.sendMsgToSocket(port, ip, msg)
    print("sendMsgToSocket()")
    print(collectgarbage("count"))
