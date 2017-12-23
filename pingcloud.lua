@@ -18,6 +18,7 @@ socket:on("sent", function(sck, c)
    print("onSent()")
    sck:close()
    print("didPing")
+   return 0
 end)
 
 print("connecting to " .. ip .. ":" .. port)
