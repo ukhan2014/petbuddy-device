@@ -116,7 +116,8 @@ function petbuddy.beginServer(port)
             conn:close()
             print("count after conn:close")
             print(collectgarbage("count"))
-            petbuddy.pingCloud(10004,"192.168.1.2")
+            -- petbuddy.pingCloud(10004,"192.168.1.2")
+            petbuddy.pingCloud(80, "petbuddy.mooo.com")
          elseif string.find(msg, "ssid") then
             home_wifi_ssid = string.sub(msg, 6, string.find(msg, "\n") - 1)
             home_wifi_psk = string.sub(msg, string.find(msg, "\n") + 5)
@@ -149,6 +150,11 @@ end
 function petbuddy.registerWithPetBuddyCloud(reginfo)
    print("registerWithPetBuddyCloud()")
    print("reginfo passed is: " .. reginfo)
+
+   --add serial # to reginfo
+   --no_bracket = string.sub(reginfo, 2, string.find(reginfo, "}"))
+   --w_ser = "\"{serial\":" .. s_no .. "," .. no_bracket
+   --print(w_ser)
    --petbuddy.sendMsgToSocket(43332, "74.51.159.20",reginfo)
 end
 
