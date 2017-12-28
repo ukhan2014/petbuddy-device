@@ -42,12 +42,22 @@ wifi.eventmon.register(wifi.eventmon.WIFI_MODE_CHANGED, function(T)
    T.old_mode.."\n\tnew_mode: "..T.new_mode)
 end)
 
+local msg = ...
+print("connect2HomeWifi(), msg:" .. msg)
+
+print("heap = " .. collectgarbage("count")*1024)
+
+home_wifi_ssid = string.sub(msg, 6, string.find(msg, "\n") - 1)
+home_wifi_psk = string.sub(msg, string.find(msg, "\n") + 5)
+home_wifi_psk = string.gsub(home_wifi_psk, "\n", "") -- remove line breaks
+print("rx_ssid=" .. home_wifi_ssid)
+print("rx_psk=" .. home_wifi_psk)
+
 cfg = 
 {
    ssid = home_wifi_ssid,
    pwd = home_wifi_psk
 }
-print("connect2HomeWifi()")
 print("connecting to wifi ssid=" .. cfg.ssid .. " and pwd=" .. cfg.pwd)
 wifi.setmode(wifi.STATION)
 wifi.setphymode(wifi.PHYMODE_N)
