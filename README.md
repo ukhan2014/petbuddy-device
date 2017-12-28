@@ -2,6 +2,7 @@
 
 Device side code for PetBuddy
   - lua codebase runs on esp-8266
+  - Wiki for board: https://github.com/esp8266/esp8266-wiki/wiki
   - using NodeMCU as devkit
   - flowchart file can be opened with draw.io webapp
   - NodeMCU firmware binary/info can be found in the ./fw/ directory
