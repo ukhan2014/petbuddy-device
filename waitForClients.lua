@@ -12,6 +12,7 @@ tmr.alarm( 0, 5000, 1, function()
    table = wifi.ap.getclient()
    if (next(table) == nil) then
       print("waitForClients(): Waiting for a cnxn for PBD setup")
+      print("heap = " .. collectgarbage("count")*1024)
    else
       ip, nm, gw=wifi.ap.getip()
       print("IP Info: \nIP Address: ",ip)
@@ -22,7 +23,7 @@ tmr.alarm( 0, 5000, 1, function()
          print(mac,ip)
       end
       tmr.stop(0)
+      print("doing beginServer")
+      loadfile("runCmdHandler.lua")
    end
 end)
-print("waitForClients done")
-return 0
