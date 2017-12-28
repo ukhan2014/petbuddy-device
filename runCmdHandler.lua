@@ -27,15 +27,10 @@ srv:listen(8234,function(conn)
          -- loadfile("pingCloud.lua")(10004,"192.168.1.2")
          loadfile("pingCloud.lua")(80, "petbuddy.mooo.com")
       elseif string.find(msg, "ssid") then
-         home_wifi_ssid = string.sub(msg, 6, string.find(msg, "\n") - 1)
-         home_wifi_psk = string.sub(msg, string.find(msg, "\n") + 5)
-         home_wifi_psk = string.gsub(home_wifi_psk, "\n", "") -- remove line breaks
-         print("rx_ssid=" .. home_wifi_ssid)
-         print("rx_psk=" .. home_wifi_psk)
          conn:send("Thank you, turning off this server, byebye.\n")
          conn:on("sent",function(conn)
             conn:close() 
-            loadfile("connect2HomeWifi.lua")(home_wifi_ssid, home_wifi_psk)
+            loadfile("connect2HomeWifi.lua")(msg)
          end)
          return
       elseif string.find(msg, "reginfo") then
