@@ -1,6 +1,8 @@
 local s_no, pass = ...
 print("setupAP(), s_no:" .. s_no .. " pass:" .. pass)
 
+print("heap = " .. collectgarbage("count")*1024)
+
 -- Network Variables
 ap_cfg = 
 {
